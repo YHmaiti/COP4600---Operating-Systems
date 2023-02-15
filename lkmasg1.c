@@ -2,6 +2,8 @@
  * File:	lkmasg1.c
  * Adapted for Linux 5.15 by: John Aedo
  * Class:	COP4600-SP23
+ * 
+ * @modified by: add names here : D
  */
 
 #include <linux/module.h>	  // Core header for modules.
@@ -227,8 +229,11 @@ static ssize_t write(struct file *filep, const char *buffer, size_t len, loff_t 
 	return len;
 }
 
+/*
 // initialize the module
 module_init(init_module);
 
 // remove the module
 module_exit(cleanup_module);
+*/
+// removed these two seems that they are needed! But we need more testing 
