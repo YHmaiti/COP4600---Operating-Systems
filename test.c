@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
     }
 
     // changed this here just to also print the length of the message
-    printf("The received message is: [%s (%d letters)]\n", receive, ret);
+    printf("The received message is: [%s]\n", receive, ret);
     printf("End of the program\n");
     return 0;
 }
