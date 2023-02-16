@@ -3,15 +3,15 @@
  * Adapted for Linux 5.15 by: John Aedo
  * Class:	COP4600-SP23
  * 
- * @modified by: add names here : D
+ * @modified by: Yohan Hmaiti - Alyssa YeeKee - Anna Zheng for the fulfillment of the PA1 Requirements
  */
+
 
 #include <linux/module.h>	  // Core header for modules.
 #include <linux/device.h>	  // Supports driver model.
 #include <linux/kernel.h>	  // Kernel header for convenient functions.
 #include <linux/fs.h>		  // File-system support.
 #include <linux/uaccess.h>	  // User access copy function support.
-#include <linux/init.h>		  // Init and exit macros.
 #define DEVICE_NAME "lkmasg1" // Device name.
 #define CLASS_NAME "char"	  ///< The device class -- this is a character device driver
 
@@ -137,7 +137,7 @@ static int close(struct inode *inodep, struct file *filep)
 
 	// let's keep track of the opening count here
 
-	if (openingCount_Device < 0)
+	if (openingCount_Device <= 0)
 	{
 		printk(KERN_INFO "lkmasg1: device is closed, so we will not close it again.\n");
 		return -EBUSY;
@@ -158,7 +158,7 @@ static ssize_t read(struct file *filep, char *buffer, size_t len, loff_t *offset
 
 	if (len > 1024)
 	{
-		printk(KERN_INFO "lkmasg1: the length of the buffer passed is bigger than 1024, so we will only read up to 1KB.\n");
+		printk(KERN_INFO "lkmasg1: the length of the buffer passed is bigger than 1024, so we will only read up to 1KB -> {1024}.\n");
 		len = messageSize;
 	}
 
