@@ -192,7 +192,9 @@ static ssize_t read(struct file *filep, char *buffer, size_t len, loff_t *offset
 		return -EFAULT;
 	}
 
-	return 0;
+	/* return 0; */
+
+	return len;
 }
 
 /*

@@ -58,7 +58,9 @@ int main(int argc, char *argv[])
         perror("Failed to read the message from the device.");
         return errno;
     }
-    printf("The received message is: [%s]\n", receive);
+
+    // changed this here just to also print the length of the message
+    printf("The received message is: [%s (%d letters)]\n", receive, ret);
     printf("End of the program\n");
     return 0;
 }
