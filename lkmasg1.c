@@ -158,15 +158,22 @@ static ssize_t read(struct file *filep, char *buffer, size_t len, loff_t *offset
 
 	if (len > 1024)
 	{
-		printk(KERN_INFO "lkmasg1: the length of the buffer passed is bigger than 1024, so we will only read up to 1KB -> {1024}.\n");
+		printk(KERN_INFO "lkmasg1: the length of the buffer passed is bigger than 1024 (%d), so we will only read up to 1KB -> {1024}.\n", len);
 		len = messageSize;
 	}
 
 	// If not enough data is available to service a read request, the driver must respond with only the amount available (including 0 bytes)
 	if (len > messageSize)
 	{
-		printk(KERN_INFO "lkmasg1: the length of the buffer passed is bigger than the amount of data available, so we will only read up to the amount of data available.\n");
+		printk(KERN_INFO "lkmasg1: the length of the buffer passed is bigger than the amount of data available (%d), so we will only read up to the amount of data available (%d).\n", len, messageSize);
 		len = messageSize;
+	}
+
+	if(len < 0 || messageSize < 0)
+	{
+		printk(KERN_INFO "lkmasg1: no data available to read, length or message size are negative values\n");
+		//copy_to_user(buffer, messageBuffer, len);
+		return len;
 	}
 
 	if(len == 0 || messageSize == 0)
@@ -183,8 +190,8 @@ static ssize_t read(struct file *filep, char *buffer, size_t len, loff_t *offset
 	if (error == 0)
 	{
 		printk(KERN_INFO "lkmasg1: read %d bytes from the device.\n", len);
-		messageSize = 0;
-		return (len = 0);
+		/* messageSize = 0; */
+		return len;
 	}
 	else
 	{
@@ -203,6 +210,12 @@ static ssize_t read(struct file *filep, char *buffer, size_t len, loff_t *offset
 static ssize_t write(struct file *filep, const char *buffer, size_t len, loff_t *offset)
 {
 	printk(KERN_INFO "write stub");
+
+	if (len < 0)
+	{
+		printk(KERN_INFO "lkmasg1: the length of the buffer passed is negative, so we will not write anything.\n");
+		return len;
+	}
 
 	// only store bytes written up to a constant buffer size of at least 1KB
 	// If not enough buffer is available to store a write request, the driver must store only up to the amount available if (len > 1024)
