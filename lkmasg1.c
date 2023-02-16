@@ -158,14 +158,14 @@ static ssize_t read(struct file *filep, char *buffer, size_t len, loff_t *offset
 
 	if (len > 1024)
 	{
-		printk(KERN_INFO "lkmasg1: the length of the buffer passed is bigger than 1024 (%d), so we will only read up to 1KB -> {1024}.\n", len);
+		printk(KERN_INFO "lkmasg1: the length of the buffer passed is bigger than 1024 (len buffer -> %d), so we will only read up to 1KB -> {1024}.\n", len);
 		len = messageSize;
 	}
 
 	// If not enough data is available to service a read request, the driver must respond with only the amount available (including 0 bytes)
 	if (len > messageSize)
 	{
-		printk(KERN_INFO "lkmasg1: the length of the buffer passed is bigger than the amount of data available (%d), so we will only read up to the amount of data available (%d).\n", len, messageSize);
+		printk(KERN_INFO "lkmasg1: the length of the buffer passed is bigger than the message size available (len buffer -> %d), so we will only read up to the amount of data available (message size -> %d).\n", len, messageSize);
 		len = messageSize;
 	}
 
@@ -210,7 +210,7 @@ static ssize_t read(struct file *filep, char *buffer, size_t len, loff_t *offset
 static ssize_t write(struct file *filep, const char *buffer, size_t len, loff_t *offset)
 {
 	printk(KERN_INFO "write stub");
-
+	printk(KERN_INFO "lkmasg1: received %zu characters from the user\n", len);
 	if (len < 0)
 	{
 		printk(KERN_INFO "lkmasg1: the length of the buffer passed is negative, so we will not write anything.\n");
@@ -221,7 +221,7 @@ static ssize_t write(struct file *filep, const char *buffer, size_t len, loff_t 
 	// If not enough buffer is available to store a write request, the driver must store only up to the amount available if (len > 1024)
 	if (len > 1024)
 	{
-		printk(KERN_INFO "lkmasg1: the length of the buffer passed is bigger than 1024, so we will only write up to 1KB.\n");
+		printk(KERN_INFO "lkmasg1: the length of the buffer passed is bigger than 1024 (lenBuffer ->%d), so we will only write up to 1KB (1024).\n");
 		len = 1024;
 	}
 
@@ -230,7 +230,7 @@ static ssize_t write(struct file *filep, const char *buffer, size_t len, loff_t 
 
 	if (error == 0)
 	{
-		printk(KERN_INFO "lkmasg1: received %zu characters from the user\n", len);
+		printk(KERN_INFO "lkmasg1: Writing %zu characters from the user\n", len);
 		messageSize = len;
 		return len;
 	}
